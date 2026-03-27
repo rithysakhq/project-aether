@@ -6,9 +6,13 @@ const MODEL_INFO: Record<string, string> = {
   'qwen3:4b': 'Lightweight · Quick queries',
   'qwen3-vl:8b': 'Vision · Image + text',
   'qwen3-vl:4b': 'Vision · Lightweight',
-  'deepseek-r1:8b': 'Reasoning · Problem solving',
-  'gemma3:4b': 'Fast · Instruction following',
-  'gemma3:1b': 'Ultra-light · Trivial tasks',
+  'deepseek-r1:8b': '[Reasoning] Deep thinking · Problem solving',
+  'gemma3:4b': '[Balanced] Instruction following',
+  'gemma3:1b': '[Flash] Ultra-light · One-liners',
+  'llama3.2:3b': '[Fast] General chat · Daily driver',
+  'llama3.2:1b': '[Flash] Fastest · Trivial tasks',
+  'qwen2.5-coder:3b': '[Coding] Code, debug, tech tasks',
+  'phi4-mini': '[Smart] Reasoning · Analysis',
 }
 
 function getModelColor(name: string): { bg: string; text: string; iconBg: string } {
@@ -16,6 +20,8 @@ function getModelColor(name: string): { bg: string; text: string; iconBg: string
   if (n.includes('qwen')) return { bg: 'bg-blue/15', text: 'text-blue', iconBg: 'bg-blue/10' }
   if (n.includes('deepseek')) return { bg: 'bg-orange/15', text: 'text-orange', iconBg: 'bg-orange/10' }
   if (n.includes('gemma')) return { bg: 'bg-green/15', text: 'text-green', iconBg: 'bg-green/10' }
+  if (n.includes('llama')) return { bg: 'bg-purple/15', text: 'text-purple', iconBg: 'bg-purple/10' }
+  if (n.includes('phi')) return { bg: 'bg-blue/10', text: 'text-blue/70', iconBg: 'bg-blue/08' }
   return { bg: 'bg-surface2', text: 'text-muted', iconBg: 'bg-surface2' }
 }
 
@@ -25,6 +31,8 @@ function getModelInitial(name: string): string {
   if (n.includes('qwen')) return 'Qw'
   if (n.includes('deepseek')) return 'Ds'
   if (n.includes('gemma')) return 'Gm'
+  if (n.includes('llama')) return 'Ll'
+  if (n.includes('phi')) return 'Φ'
   return name.slice(0, 2).toUpperCase()
 }
 

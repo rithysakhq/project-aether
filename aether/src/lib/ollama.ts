@@ -46,7 +46,7 @@ export async function* streamChat(
       stream: true,
       options: {
         num_ctx: 2048,
-        num_predict: 1024,
+        num_predict: -1,
         temperature: 0.7,
         top_k: 40,
         top_p: 0.9,
@@ -57,7 +57,8 @@ export async function* streamChat(
   })
 
   if (!res.ok) {
-    throw new Error(`Ollama returned ${res.status}`)
+    const errBody = await res.text()
+    throw new Error(`ollama:${res.status}:${errBody}`)
   }
 
   const reader = res.body?.getReader()

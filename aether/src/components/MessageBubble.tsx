@@ -62,7 +62,7 @@ renderer.code = function ({ text, lang }: { text: string; lang?: string }) {
       highlighted = text
     }
   }
-  return `<pre><code class="hljs${lang ? ` language-${lang}` : ''}">${highlighted}</code></pre>`
+  return `<pre><button class="copy-btn" onclick="(function(btn){var code=btn.nextElementSibling.innerText;navigator.clipboard.writeText(code).then(function(){btn.textContent='Copied!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied')},1500)});})(this)">Copy</button><code class="hljs${lang ? ` language-${lang}` : ''}">${highlighted}</code></pre>`
 }
 
 marked.setOptions({
@@ -150,6 +150,11 @@ export function MessageBubble({ message, isStreaming, stagger }: MessageBubblePr
               <ThinkingIndicator />
             ) : (
               <div className="relative">
+                {message.thinkingSeconds != null && (
+                  <span className="text-[11px] text-muted/25 mb-2 block">
+                    Thought for {message.thinkingSeconds}s
+                  </span>
+                )}
                 <div
                   className="markdown-body"
                   dangerouslySetInnerHTML={{ __html: htmlContent ?? '' }}

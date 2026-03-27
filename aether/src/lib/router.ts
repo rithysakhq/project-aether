@@ -20,13 +20,13 @@ function matchesKeywords(text: string, keywords: string[]): boolean {
 
 export function autoRoute(message: string): { model: string; label: string } {
   if (matchesKeywords(message, CODE_KEYWORDS)) {
-    return { model: 'qwen3:8b', label: 'Code → qwen3:8b' }
+    return { model: 'qwen2.5-coder:3b', label: 'Code [Coding] → qwen2.5-coder:3b' }
   }
   if (matchesKeywords(message, REASONING_KEYWORDS)) {
-    return { model: 'deepseek-r1:8b', label: 'Reasoning → deepseek-r1:8b' }
+    return { model: 'phi4-mini', label: 'Reasoning [Smart] → phi4-mini' }
   }
   if (message.trim().length < 60) {
-    return { model: 'qwen3:4b', label: 'Quick → qwen3:4b' }
+    return { model: 'gemma3:1b', label: 'Quick [Flash] → gemma3:1b' }
   }
-  return { model: 'qwen3:8b', label: 'General → qwen3:8b' }
+  return { model: 'llama3.2:3b', label: 'General [Fast] → llama3.2:3b' }
 }

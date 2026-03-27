@@ -66,7 +66,7 @@ export function InputBar({ onSend, inputRef }: InputBarProps) {
           placeholder="Message Aether..."
           rows={1}
           className="flex-1 bg-transparent border-none outline-none resize-none text-[14px] text-text placeholder:text-muted/30 px-4 py-3 font-sans"
-          style={{ minHeight: '22px', maxHeight: '140px' }}
+          style={{ height: '22px', minHeight: '22px', maxHeight: '140px' }}
         />
         <button
           onClick={handleSendClick}

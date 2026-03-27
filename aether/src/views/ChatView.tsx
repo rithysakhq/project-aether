@@ -17,6 +17,7 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
   const [routeNotice, setRouteNotice] = useState<string | null>(null)
   const [routeNoticeIndex, setRouteNoticeIndex] = useState<number | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const thinkingStartRef = useRef<number | null>(null)
 
   const {
     currentThreadId,
@@ -27,6 +28,7 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
     addMessage,
     updateLastMessage,
     setLastMessageModel,
+    setMessageThinkingSeconds,
     setTitle,
     setStreaming,
     clearThread,
@@ -91,6 +93,7 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
 
       // Add empty assistant message
       addMessage(threadId, { role: 'assistant', content: '' })
+      thinkingStartRef.current = Date.now()
       setStreaming(true)
 
       // Stream
@@ -103,10 +106,18 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
           .filter((m) => m.content) // skip empty placeholder
           .map((m) => ({ role: m.role, content: m.content }))
 
+        // Get the id of the empty assistant message we just added
+        const lastMsgId = useStore.getState().threads.find((t) => t.id === threadId)
+          ?.messages.at(-1)?.id ?? null
+
         let accumulated = ''
 
         for await (const chunk of streamChat(model, chatMessages, abortController.signal)) {
           if (!useStore.getState().isStreaming) break
+          if (accumulated === '' && lastMsgId && thinkingStartRef.current !== null) {
+            const secs = Math.round((Date.now() - thinkingStartRef.current) / 1000)
+            setMessageThinkingSeconds(threadId, lastMsgId, secs)
+          }
           accumulated += chunk
           updateLastMessage(threadId, accumulated)
         }
@@ -116,10 +127,15 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
         if ((err as Error).name === 'AbortError') {
           // User stopped
         } else {
-          updateLastMessage(
-            threadId,
-            "Couldn't reach Ollama. Make sure it's running: `ollama serve`"
-          )
+          const msg = (err as Error).message
+          if (msg.startsWith('ollama:')) {
+            const body = msg.split(':').slice(2).join(':')
+            let detail = body
+            try { detail = JSON.parse(body).error ?? body } catch {}
+            updateLastMessage(threadId, `**Model error:** ${detail}\n\nTry \`ollama pull ${model}\` or switch models.`)
+          } else {
+            updateLastMessage(threadId, "Couldn't reach Ollama. Make sure it's running: `ollama serve`")
+          }
         }
       } finally {
         setStreaming(false)
@@ -135,6 +151,7 @@ export function ChatView({ onOpenHelp, inputRef }: ChatViewProps) {
       addMessage,
       updateLastMessage,
       setLastMessageModel,
+      setMessageThinkingSeconds,
       setTitle,
       setStreaming,
     ]

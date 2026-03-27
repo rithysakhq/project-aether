@@ -7,6 +7,7 @@ export interface Message {
   role: 'user' | 'assistant'
   content: string
   model?: string
+  thinkingSeconds?: number
   ts: number
 }
 
@@ -41,6 +42,7 @@ interface Store {
   addMessage: (threadId: string, msg: Omit<Message, 'id' | 'ts'>) => void
   updateLastMessage: (threadId: string, content: string) => void
   setLastMessageModel: (threadId: string, model: string) => void
+  setMessageThinkingSeconds: (threadId: string, msgId: string, secs: number) => void
   setTitle: (threadId: string, title: string) => void
   setSelectedModel: (model: string) => void
   setModels: (models: OllamaModel[]) => void
@@ -135,6 +137,20 @@ export const useStore = create<Store>()(
                   ...t,
                   messages: t.messages.map((m, i) =>
                     i === t.messages.length - 1 ? { ...m, model } : m
+                  ),
+                }
+              : t
+          ),
+        })),
+
+      setMessageThinkingSeconds: (threadId, msgId, secs) =>
+        set((s) => ({
+          threads: s.threads.map((t) =>
+            t.id === threadId
+              ? {
+                  ...t,
+                  messages: t.messages.map((m) =>
+                    m.id === msgId ? { ...m, thinkingSeconds: secs } : m
                   ),
                 }
               : t

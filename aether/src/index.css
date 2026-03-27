@@ -168,7 +168,27 @@ html, body, #root {
   padding: 14px 16px;
   overflow-x: auto;
   margin: 0.75em 0;
+  position: relative;
 }
+.copy-btn {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  font-size: 11px;
+  color: #555;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 5px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.4;
+}
+.markdown-body pre:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { color: #888; background: rgba(255,255,255,0.09); }
+.copy-btn.copied { color: #6ee7b7; }
 .markdown-body pre code {
   background: none;
   padding: 0;
