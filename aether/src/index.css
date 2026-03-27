@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Invisible scrollbar — appears only on hover */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+/* Animations */
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.97) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.animate-msg-in {
+  opacity: 0;
+  animation: msgIn 0.2s ease forwards;
+}
+.animate-modal-in {
+  animation: modalIn 0.18s ease forwards;
+}
+.animate-overlay-in {
+  animation: overlayIn 0.15s ease forwards;
+}
+.animate-dropdown-in {
+  animation: dropdownIn 0.12s ease forwards;
+}
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+.animate-toast-in {
+  animation: toastIn 0.18s ease forwards;
+}
+
+.thinking-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #555;
+  animation: bounce 1.2s infinite;
+}
+.thinking-dot:nth-child(2) { animation-delay: 0.18s; }
+.thinking-dot:nth-child(3) { animation-delay: 0.36s; }
+
+.thinking-text {
+  font-size: 14px;
+  font-weight: 500;
+  background: linear-gradient(90deg, #555 0%, #999 50%, #555 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: white;
+  vertical-align: text-bottom;
+  animation: blink 0.65s step-end infinite;
+  margin-left: 1px;
+}
+
+.status-dot-pulse {
+  animation: pulse 2.5s infinite;
+}
+
+/* Markdown styles for assistant messages */
+.markdown-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #e8e8e8;
+  word-wrap: break-word;
+}
+.markdown-body p { margin-bottom: 0.5em; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.3;
+}
+.markdown-body h1 { font-size: 1.4em; }
+.markdown-body h2 { font-size: 1.25em; }
+.markdown-body h3 { font-size: 1.1em; }
+.markdown-body strong { font-weight: 600; color: #ffffff; }
+.markdown-body em { font-style: italic; }
+.markdown-body code {
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.88em;
+  background: rgba(255,255,255,0.05);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+}
+.markdown-body pre {
+  background: #111111;
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin: 0.75em 0;
+}
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.markdown-body ul, .markdown-body ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+.markdown-body li { margin: 0.25em 0; }
+.markdown-body blockquote {
+  border-left: 2px solid rgba(255,255,255,0.08);
+  padding-left: 1em;
+  color: #888;
+  margin: 0.5em 0;
+}
+.markdown-body a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+.markdown-body a:hover { text-decoration: underline; }
+
+/* Toggle component — macOS Tahoe style */
+.toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 11px;
+  background: #2a2a2a;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.toggle-track.on {
+  background: #e8e8e8;
+}
+.toggle-knob {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #555;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.toggle-track.on .toggle-knob {
+  transform: translateX(16px);
+  background: #1a1a1a;
+}
+
+/* kbd tag styling */
+kbd {
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 11px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 5px;
+  padding: 2px 7px;
+  color: #999;
+}
