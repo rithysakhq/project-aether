@@ -1,3 +1,5 @@
+import { fetch } from '@tauri-apps/plugin-http'
+
 const BASE = 'http://localhost:11434'
 
 export interface OllamaModel {
